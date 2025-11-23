@@ -11,6 +11,22 @@ O projeto utiliza o dataset público **"Teo Me Why - Loyalty System"**.
 * Identificar padrões suspeitos ou anomalias nas transações.
 * Gerar KPIs para acompanhamento de performance do programa de fidelidade.
 
+## 📋 Funcionalidades e Métricas (Feature Engineering)
+O projeto foca na construção de uma **ABT (Analytical Base Table)**, calculando métricas de comportamento do usuário em diferentes janelas de tempo (Histórico completo, 7, 14, 28 e 56 dias).
+
+As principais variáveis desenvolvidas incluem:
+
+* **Comportamento Transacional:**
+    * Quantidade de transações (Visão Vida e janelas deslizantes).
+    * Saldo atual de pontos e histórico de acúmulo (pontos ganhos) vs. resgate (pontos gastos).
+    * Engajamento recente (D28) versus histórico (Vida).
+* **Recência e Tempo:**
+    * Dias desde a última transação (Recência).
+    * Idade do cliente na base (Tempo de vida/Tenure).
+* **Preferências e Hábitos:**
+    * Produto favorito (Moda estatística) por janela de tempo.
+    * Dia da semana e período do dia com maior atividade (D28).
+      
 ## Fonte dos Dados
 **Nota Importante:** Os arquivos de dados (`.csv`) **não** estão incluídos neste repositório por questões de boas práticas e tamanho de arquivos.
 
