@@ -1,4 +1,4 @@
--- Dia da última transação de cada cliente
+--- Dia da última transação de cada cliente
 WITH tb_transacoes AS (
     SELECT  Idcliente,
             Idtransacao,
