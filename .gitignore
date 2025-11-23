@@ -1,33 +1,42 @@
 # --- Dados e Backups ---
-# Ignorar arquivos de dados pesados (CSV, Excel, JSON grandes)
+# Ignorar arquivos de dados pesados
 *.csv
 *.xlsx
 *.xls
 *.json
 *.xml
+*.parquet 
 
-# Ignorar backups de banco de dados
+# Arquivos compactados (datasets brutos)
+*.zip     
+*.tar.gz  
+*.rar     
+
+# Ignorar bancos de dados locais (CRÍTICO para o seu arquivo database.db)
+*.db  
+*.sqlite  
+*.sqlite3  
 *.sql.gz
 *.bak
 *.dump
 
+# --- Python / Ambientes Virtuais ---
+# NUNCA suba a pasta onde ficam as bibliotecas instaladas
+venv/     
+.venv/    
+env/      
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
 # --- Segurança e Configurações ---
-# NUNCA suba arquivos com senhas ou chaves de API
 .env
 config.py
 connections.ini
 credentials.txt
 
 # --- Sistema e IDE ---
-# Arquivos temporários do sistema operacional
 .DS_Store
 Thumbs.db
-
-# Arquivos de configuração da IDE (opcional, mas recomendado)
 .vscode/
 .idea/
-
-# --- Python / Jupyter (Caso use notebook para rodar SQL) ---
-__pycache__/
-*.py[cod]
-.ipynb_checkpoints/
