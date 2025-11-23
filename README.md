@@ -11,7 +11,7 @@ O projeto utiliza o dataset público **"Teo Me Why - Loyalty System"**.
 * Identificar padrões suspeitos ou anomalias nas transações.
 * Gerar KPIs para acompanhamento de performance do programa de fidelidade.
 
-## 📋 Funcionalidades e Métricas (Feature Engineering)
+## Funcionalidades e Métricas (Feature Engineering)
 O projeto foca na construção de uma **ABT (Analytical Base Table)**, calculando métricas de comportamento do usuário em diferentes janelas de tempo (Histórico completo, 7, 14, 28 e 56 dias).
 
 As principais variáveis desenvolvidas incluem:
