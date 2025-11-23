@@ -1,0 +1,1 @@
+-- Idade na base (Dia desde o cadastro) de cada cliente
