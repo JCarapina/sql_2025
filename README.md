@@ -20,16 +20,14 @@ Para reproduzir este projeto:
 3.  Coloque os arquivos descompactados na raiz deste projeto ou em uma pasta `/data` (certifique-se de que o `.gitignore` está configurado).
 
 ## Tecnologias Utilizadas
-* **Linguagem:** SQL (SQLite*)
+* **Linguagem:** SQL (SQLite)
 * **Versionamento:** Git & GitHub
 * **IDE:** VS Code
 
 ## Como Executar
 1.  Clone este repositório:
     ```bash
-    git clone [https://github.com/JCarapina/sql_2025.git](https://github.com/JCarapina/sql_2025.git)
+    git clone https://github.com/JCarapina/sql_2025.git
     ```
 2.  Baixe os dados conforme instruído na seção "Fonte dos Dados".
 3.  Execute os scripts na ordem numérica (ex: `01_criacao_tabelas.sql`, `02_carga_dados.sql`...).
-
----
