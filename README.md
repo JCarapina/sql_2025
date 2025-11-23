@@ -20,7 +20,7 @@ Para reproduzir este projeto:
 3.  Coloque os arquivos descompactados na raiz deste projeto ou em uma pasta `/data` (certifique-se de que o `.gitignore` está configurado).
 
 ## Tecnologias Utilizadas
-* **Linguagem:** SQL (Dialeto: *Insira aqui se é MySQL, PostgreSQL, SQLite, etc.*)
+* **Linguagem:** SQL (SQLite*)
 * **Versionamento:** Git & GitHub
 * **IDE:** VS Code
 
