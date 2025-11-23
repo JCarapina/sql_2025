@@ -1,0 +1,33 @@
+# --- Dados e Backups ---
+# Ignorar arquivos de dados pesados (CSV, Excel, JSON grandes)
+*.csv
+*.xlsx
+*.xls
+*.json
+*.xml
+
+# Ignorar backups de banco de dados
+*.sql.gz
+*.bak
+*.dump
+
+# --- Segurança e Configurações ---
+# NUNCA suba arquivos com senhas ou chaves de API
+.env
+config.py
+connections.ini
+credentials.txt
+
+# --- Sistema e IDE ---
+# Arquivos temporários do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de configuração da IDE (opcional, mas recomendado)
+.vscode/
+.idea/
+
+# --- Python / Jupyter (Caso use notebook para rodar SQL) ---
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
