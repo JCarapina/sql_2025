@@ -1,4 +1,4 @@
--- Quantidade de transações históricas(vida, D7, D14, D28, D56)
+--- Quantidade de transações históricas(vida, D7, D14, D28, D56)
 WITH tb_transacoes AS (
     SELECT  Idcliente,
             Idtransacao,
