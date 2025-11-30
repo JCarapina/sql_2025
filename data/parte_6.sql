@@ -9,11 +9,11 @@ WITH tb_transacoes AS (
     FROM transacoes
 )
 SELECT  IdCliente,
-    sum(CASE WHEN qtdePontos > 0 THEN qtdePontos ELSE 0 END) AS PontosAcumuladosVida,
-    sum(CASE WHEN qtdePontos > 0 AND diffDate < 56 THEN qtdePontos ELSE 0 END) AS PontosAcumuladosD56,
-    sum(CASE WHEN qtdePontos > 0 AND diffDate < 28 THEN qtdePontos ELSE 0 END) AS PontosAcumuladosD28,
-    sum(CASE WHEN qtdePontos > 0 AND diffDate < 14 THEN qtdePontos ELSE 0 END) AS PontosAcumuladosD14,
-    sum(CASE WHEN qtdePontos > 0 AND diffDate <  7 THEN qtdePontos ELSE 0 END) AS PontosAcumuladosD7
+    sum(CASE WHEN qtdePontos > 0 THEN qtdePontos ELSE 0 END) AS PositAcumuladosVida,
+    sum(CASE WHEN qtdePontos > 0 AND diffDate < 56 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD56,
+    sum(CASE WHEN qtdePontos > 0 AND diffDate < 28 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD28,
+    sum(CASE WHEN qtdePontos > 0 AND diffDate < 14 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD14,
+    sum(CASE WHEN qtdePontos > 0 AND diffDate <  7 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD7
 
 FROM tb_transacoes 
 GROUP BY IdCliente
