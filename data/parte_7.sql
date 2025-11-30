@@ -1,0 +1,1 @@
+-- Pontos acumulados negativos
