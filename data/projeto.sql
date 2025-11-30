@@ -22,7 +22,7 @@ tb_sumario_transacoes AS (
             count(CASE WHEN diffDate <= 56 THEN 1 END) AS QtdeTransacoesD56,
             count(CASE WHEN diffDate <= 28 THEN 1 END) AS QtdeTransacoesD28,
             count(CASE WHEN diffDate <= 14 THEN 1 END) AS QtdeTransacoesD14,
-            count(CASE WHEN diffDate <= 7 THEN 1 END) AS QtdeTransacoesD7
+            count(CASE WHEN diffDate <= 7 THEN 1 END) AS QtdeTransacoesD7,
 
             sum(qtdePontos) AS saldoPontos,
 
@@ -47,5 +47,7 @@ tb_sumario_transacoes AS (
 SELECT  t1.*,
         t2.IdadeBase
 
-FROM tb_sumario_transacoes
-LEFT JOIN
+FROM tb_sumario_transacoes AS t1
+
+LEFT JOIN tb_cliente AS t2
+ON t1.IdCliente = t2.IdCliente
