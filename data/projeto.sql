@@ -3,7 +3,8 @@ WITH tb_transacoes AS (
             Idtransacao,
             QtdePontos,
             datetime(substr(DtCriacao,1,19)) AS DtCriacao,
-            julianday('now') - julianday(substr(DtCriacao,1,10)) AS diffDate
+            julianday('now') - julianday(substr(DtCriacao,1,10)) AS diffDate,
+            CAST(strftime('%H', substr(DtCriacao,1,19)) AS INTEGER) AS DtHora
     FROM transacoes
 ),
 
@@ -101,6 +102,29 @@ tb_cliente_dia_rn AS (
     FROM tb_cliente_dia
 ),
 
+tb_cliente_periodo AS (
+    SELECT  Idcliente,
+            CASE 
+                WHEN DtHora BETWEEN 7 AND 12 THEN 'MANHÃ'
+                WHEN DtHora BETWEEN 13 AND 18 THEN 'TARDE'
+                WHEN DtHora BETWEEN 19 AND 23 THEN 'NOITE'
+                WHEN DtHora BETWEEN 24 AND 6 THEN 'MADRUGADA'
+                ELSE 'SEM INFORMAÇÃO'
+            END AS Periodo,
+            COUNT(*) AS qtdeTransacao
+    FROM tb_transacoes
+
+    GROUP BY 1,2
+),
+
+tb_cliente_periodo_rn AS (
+    SELECT *,
+            ROW_NUMBER() OVER (PARTITION BY IdCliente ORDER BY qtdeTransacao DESC) AS rnPeriodo
+
+    FROM tb_cliente_periodo
+),
+
+
 tb_join AS  (
 
     SELECT  t1.*,
@@ -109,7 +133,9 @@ tb_join AS  (
             t4.DescNomeProduto AS produto56,
             t5.DescNomeProduto AS produto28,
             t6.DescNomeProduto AS produto14,
-            t7.DescNomeProduto AS produto7
+            t7.DescNomeProduto AS produto7,
+            COALESCE(t8.DtDia, -1) AS DtDia,
+            t9.Periodo
 
     FROM tb_sumario_transacoes AS t1
 
@@ -139,6 +165,10 @@ tb_join AS  (
     LEFT JOIN tb_cliente_dia_rn AS t8
     ON t1.idCliente = t8.idCliente
     AND t8.rnDia = 1
+
+    LEFT JOIN tb_cliente_periodo_rn AS t9
+    ON t1.idCliente = t9.idCliente
+    AND t9.rnPeriodo = 1
 )
 
 SELECT * FROM tb_join
