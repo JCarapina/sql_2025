@@ -8,44 +8,20 @@ WITH tb_transacoes AS (
     FROM transacoes 
 ),
 
-tb_transacao_produto AS (
-    SELECT  t1.*,
-            t2.idProduto,
-            t3.DescNomeProduto,
-            t3.DescCategoriaProduto
-
-    FROM tb_transacoes AS t1
-
-    LEFT JOIN transacao_produto AS t2
-    ON t1.IdTransacao = t2.IdTransacao
-
-    LEFT JOIN produtos AS t3
-    ON t2.IdProduto = t3.IdProduto
+tb_cliente_dia AS (
+    SELECT  Idcliente,
+            strftime('%w', DtCriacao) AS DtDia,
+            count(*) AS qtdTransacao
+    FROM tb_transacoes 
+    WHERE diffDate <=28
+    GROUP BY IdCliente, DtDia
 ),
 
-tb_cliente_produto AS (
-    SELECT  IdCliente,
-            DescNomeProduto,
-            count(*) AS qtdeVida,
-            count(CASE WHEN diffDate <= 56 THEN IdTransacao END) AS qtde56,
-            count(CASE WHEN diffDate <= 28 THEN IdTransacao END) AS qtde28,
-            count(CASE WHEN diffDate <= 14 THEN IdTransacao END) AS qtde14,
-            count(CASE WHEN diffDate <= 7 THEN IdTransacao END) AS qtde7
+tb_cliente_dia_rn AS (
 
-
-    FROM tb_transacao_produto
-
-    GROUP BY IdCliente, DescNomeProduto
-),
-
-tb_cliente_produto_rn AS ( 
     SELECT *,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtdeVida DESC) AS rnVida,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde56 DESC) AS rn56,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde28 DESC) AS rn28,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde14 DESC) AS rn14,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde7 DESC) AS rn7
-    FROM tb_cliente_produto
-)
+        ROW_NUMBER() OVER (PARTITION BY IdCliente ORDER BY qtdTransacao DESC) AS rnDia
 
-SELECT * FROM tb_cliente_produto_rn
+
+    FROM tb_cliente_dia
+)
