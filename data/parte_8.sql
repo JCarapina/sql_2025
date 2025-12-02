@@ -25,3 +25,7 @@ tb_cliente_dia_rn AS (
 
     FROM tb_cliente_dia
 )
+
+SELECT * 
+FROM tb_cliente_dia_rn
+WHERE rnDia = 1
