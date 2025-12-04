@@ -112,7 +112,9 @@ tb_cliente_periodo AS (
                 ELSE 'SEM INFORMAÇÃO'
             END AS Periodo,
             COUNT(*) AS qtdeTransacao
+
     FROM tb_transacoes
+    WHERE diffDate <= 28
 
     GROUP BY 1,2
 ),
@@ -135,7 +137,7 @@ tb_join AS  (
             t6.DescNomeProduto AS produto14,
             t7.DescNomeProduto AS produto7,
             COALESCE(t8.DtDia, -1) AS DtDia,
-            t9.Periodo
+            COALESCE(t9.Periodo, 'SEM INFORMAÇÃO') AS periodo
 
     FROM tb_sumario_transacoes AS t1
 
