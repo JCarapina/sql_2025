@@ -173,5 +173,6 @@ tb_join AS  (
     AND t9.rnPeriodo = 1
 )
 
-SELECT * FROM tb_join
-ORDER BY idCliente
+SELECT *, 
+1. * qtdeTransacoesD28 / qtdeTransacoesVida as engajamento28vida
+FROM tb_join
