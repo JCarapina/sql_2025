@@ -137,7 +137,7 @@ tb_join AS  (
             t6.DescNomeProduto AS produto14,
             t7.DescNomeProduto AS produto7,
             COALESCE(t8.DtDia, -1) AS DtDia,
-            COALESCE(t9.Periodo, 'SEM INFORMAÇÃO') AS periodo
+            COALESCE(t9.Periodo, 'SEM INFORMAÇÃO') AS periodoMaisTransacao28
 
     FROM tb_sumario_transacoes AS t1
 
