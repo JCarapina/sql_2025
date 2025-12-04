@@ -19,8 +19,10 @@ tb_cliente_periodo AS (
                 ELSE 'SEM INFORMAÇÃO'
             END AS Periodo,
             COUNT(*) AS qtdeTransacao
-    FROM tb_transacoes
 
+    FROM tb_transacoes
+    WHERE diffDate <= 28
+    
     GROUP BY 1,2
 ),
 
