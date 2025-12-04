@@ -5,6 +5,7 @@ WITH tb_transacoes AS (
             datetime(substr(DtCriacao,1,19)) AS DtCriacao,
             julianday('now') - julianday(substr(DtCriacao,1,10)) AS diffDate,
             CAST(strftime('%H', substr(DtCriacao,1,19)) AS INTEGER) AS DtHora
+            -- WHERE DtCriacao = '2025/01/22', para saber a data especifica da consulta
     FROM transacoes
 ),
 
@@ -46,19 +47,20 @@ tb_sumario_transacoes AS (
 ),
 
 tb_transacao_produto AS (
-SELECT  t1.*,
-        t2.idProduto,
-        t3.DescNomeProduto,
-        t3.DescCategoriaProduto
+    SELECT  t1.*,
+            t2.idProduto,
+            t3.DescNomeProduto,
+            t3.DescCategoriaProduto
 
-FROM tb_transacoes AS t1
+    FROM tb_transacoes AS t1
 
-LEFT JOIN transacao_produto AS t2
-ON t1.IdTransacao = t2.IdTransacao
+    LEFT JOIN transacao_produto AS t2
+    ON t1.IdTransacao = t2.IdTransacao
 
-LEFT JOIN produtos AS t3
-ON t2.IdProduto = t3.IdProduto
+    LEFT JOIN produtos AS t3
+    ON t2.IdProduto = t3.IdProduto
 ),
+
 tb_cliente_produto AS (
     SELECT  IdCliente,
             DescNomeProduto,
