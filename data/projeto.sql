@@ -173,6 +173,7 @@ tb_join AS  (
     AND t9.rnPeriodo = 1
 )
 
-SELECT *, 
-1. * qtdeTransacoesD28 / qtdeTransacoesVida as engajamento28vida
+SELECT  *, 
+        -- '2025/01/22' drRef, para saber a data especifica da consulta
+        1. * qtdeTransacoesD28 / qtdeTransacoesVida as engajamento28vida
 FROM tb_join
