@@ -17,7 +17,7 @@ WITH tb_transacoes AS (
             CAST(strftime('%H', substr(DtCriacao,1,19)) AS INTEGER) AS DtHora
 
     FROM transacoes
-    -- WHERE DtCriacao < '2025-06-01'
+    WHERE DtCriacao < '{date}'
 ),
 
 tb_cliente AS (
@@ -192,4 +192,4 @@ SELECT
          '{date}' AS dtRef,
         *, 
         1. * qtdeTransacoesD28 / qtdeTransacoesVida as engajamento28vida
-FROM tb_join;
+FROM tb_join
