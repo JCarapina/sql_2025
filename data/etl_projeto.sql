@@ -12,8 +12,8 @@ WITH tb_transacoes AS (
             Idtransacao,
             QtdePontos,
             datetime(substr(DtCriacao,1,19)) AS DtCriacao,
-            julianday('now') - julianday(substr(DtCriacao,1,10)) AS diffDate,
-            -- Julianday('2025-06-01') - julianday(substr(DtCriacao,1,10)) AS diffDate,
+            -- julianday('now') - julianday(substr(DtCriacao,1,10)) AS diffDate,
+            Julianday('{date}') - julianday(substr(DtCriacao,1,10)) AS diffDate,
             CAST(strftime('%H', substr(DtCriacao,1,19)) AS INTEGER) AS DtHora
 
     FROM transacoes
@@ -24,8 +24,8 @@ tb_cliente AS (
 
     SELECT  IdCliente,
             datetime(substr(DtCriacao,1,19)) AS DtCriacao,
-            julianday('now') - julianday(substr(DtCriacao,1,10)) AS IdadeBase
-            -- julianday('2025-06-01') - julianday(substr(DtCriacao,1,10)) AS IdadeBase
+            -- julianday('now') - julianday(substr(DtCriacao,1,10)) AS IdadeBase
+             julianday('{date}') - julianday(substr(DtCriacao,1,10)) AS IdadeBase
 
     FROM clientes
 ), 
@@ -189,8 +189,7 @@ tb_join AS  (
 )
 
 SELECT  
-        -- '2025-06-01' AS dtRef,
+         '{date}' AS dtRef,
         *, 
-        -- '2025/01/22' drRef, para saber a data especifica da consulta
         1. * qtdeTransacoesD28 / qtdeTransacoesVida as engajamento28vida
 FROM tb_join;
