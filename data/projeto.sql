@@ -1,181 +1,199 @@
-WITH tb_transacoes AS (
-    SELECT  Idcliente,
-            Idtransacao,
-            QtdePontos,
-            datetime(substr(DtCriacao,1,19)) AS DtCriacao,
-            julianday('now') - julianday(substr(DtCriacao,1,10)) AS diffDate,
-            CAST(strftime('%H', substr(DtCriacao,1,19)) AS INTEGER) AS DtHora
-            -- WHERE DtCriacao = '2025/01/22', para saber a data especifica da consulta
-    FROM transacoes
-),
+-- --DROP TABLE feature_store_cliente;
 
-tb_cliente AS (
-    SELECT  IdCliente,
-            datetime(substr(DtCriacao,1,19)) AS DtCriacao,
-            julianday('now') - julianday(substr(DtCriacao,1,10)) AS IdadeBase
+-- WITH tb_transacoes AS (
 
-    FROM clientes
-), 
+--     SELECT  Idcliente,
+--             Idtransacao,
+--             QtdePontos,
+--             datetime(substr(DtCriacao,1,19)) AS DtCriacao,
+--             --julianday('now') - julianday(substr(DtCriacao,1,10)) AS diffDate,
+--             Julianday('2025-06-01') - julianday(substr(DtCriacao,1,10)) AS diffDate,
+--             CAST(strftime('%H', substr(DtCriacao,1,19)) AS INTEGER) AS DtHora
+--             -- WHERE DtCriacao = '2025/01/22', para saber a data especifica da consulta
 
-tb_sumario_transacoes AS (
+--     FROM transacoes
+--     WHERE DtCriacao < '2025-06-01'
+-- ),
 
-    SELECT  IdCliente,
-            count(Idtransacao) AS QtdeTransacoesVida,
-            count(CASE WHEN diffDate <= 56 THEN 1 END) AS QtdeTransacoesD56,
-            count(CASE WHEN diffDate <= 28 THEN 1 END) AS QtdeTransacoesD28,
-            count(CASE WHEN diffDate <= 14 THEN 1 END) AS QtdeTransacoesD14,
-            count(CASE WHEN diffDate <= 7 THEN 1 END) AS QtdeTransacoesD7,
+-- tb_cliente AS (
 
-            sum(qtdePontos) AS saldoPontos,
+--     SELECT  IdCliente,
+--             datetime(substr(DtCriacao,1,19)) AS DtCriacao,
+--             -- julianday('now') - julianday(substr(DtCriacao,1,10)) AS IdadeBase
+--             julianday('2025-06-01') - julianday(substr(DtCriacao,1,10)) AS IdadeBase
 
-            min(diffDate) AS diasUltimaInteracao,
+--     FROM clientes
+-- ), 
 
-            sum(CASE WHEN qtdePontos > 0 THEN qtdePontos ELSE 0 END) AS PositAcumuladosVida,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate < 56 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD56,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate < 28 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD28,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate < 14 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD14,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate <  7 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD7,
+-- tb_sumario_transacoes AS (
 
-            sum(CASE WHEN qtdePontos > 0 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosVida,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate < 56 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD56,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate < 28 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD28,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate < 14 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD14,
-            sum(CASE WHEN qtdePontos > 0 AND diffDate <  7 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD7
+--     SELECT  IdCliente,
+--             count(Idtransacao) AS QtdeTransacoesVida,
+--             count(CASE WHEN diffDate <= 56 THEN 1 END) AS QtdeTransacoesD56,
+--             count(CASE WHEN diffDate <= 28 THEN 1 END) AS QtdeTransacoesD28,
+--             count(CASE WHEN diffDate <= 14 THEN 1 END) AS QtdeTransacoesD14,
+--             count(CASE WHEN diffDate <= 7 THEN 1 END) AS QtdeTransacoesD7,
 
-    FROM tb_transacoes
-    GROUP BY IdCliente
-),
+--             sum(qtdePontos) AS saldoPontos,
 
-tb_transacao_produto AS (
-    SELECT  t1.*,
-            t2.idProduto,
-            t3.DescNomeProduto,
-            t3.DescCategoriaProduto
+--             min(diffDate) AS diasUltimaInteracao,
 
-    FROM tb_transacoes AS t1
+--             sum(CASE WHEN qtdePontos > 0 THEN qtdePontos ELSE 0 END) AS PositAcumuladosVida,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate < 56 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD56,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate < 28 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD28,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate < 14 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD14,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate <  7 THEN qtdePontos ELSE 0 END) AS PositAcumuladosD7,
 
-    LEFT JOIN transacao_produto AS t2
-    ON t1.IdTransacao = t2.IdTransacao
+--             sum(CASE WHEN qtdePontos > 0 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosVida,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate < 56 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD56,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate < 28 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD28,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate < 14 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD14,
+--             sum(CASE WHEN qtdePontos > 0 AND diffDate <  7 THEN qtdePontos ELSE 0 END) AS NegativoAcumuladosD7
 
-    LEFT JOIN produtos AS t3
-    ON t2.IdProduto = t3.IdProduto
-),
+--     FROM tb_transacoes
+--     GROUP BY IdCliente
+-- ),
 
-tb_cliente_produto AS (
-    SELECT  IdCliente,
-            DescNomeProduto,
-            count(*) AS qtdeVida,
-            count(CASE WHEN diffDate <= 56 THEN IdTransacao END) AS qtde56,
-            count(CASE WHEN diffDate <= 28 THEN IdTransacao END) AS qtde28,
-            count(CASE WHEN diffDate <= 14 THEN IdTransacao END) AS qtde14,
-            count(CASE WHEN diffDate <= 7 THEN IdTransacao END) AS qtde7
+-- tb_transacao_produto AS (
+--     SELECT  t1.*,
+--             t2.idProduto,
+--             t3.DescNomeProduto,
+--             t3.DescCategoriaProduto
 
+--     FROM tb_transacoes AS t1
 
-    FROM tb_transacao_produto
+--     LEFT JOIN transacao_produto AS t2
+--     ON t1.IdTransacao = t2.IdTransacao
 
-    GROUP BY IdCliente, DescNomeProduto
-),
+--     LEFT JOIN produtos AS t3
+--     ON t2.IdProduto = t3.IdProduto
+-- ),
 
-tb_cliente_produto_rn AS ( 
-    SELECT *,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtdeVida DESC) AS rnVida,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde56 DESC) AS rn56,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde28 DESC) AS rn28,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde14 DESC) AS rn14,
-        row_number() OVER (PARTITION BY IdCliente ORDER BY qtde7 DESC) AS rn7
-    FROM tb_cliente_produto
-),
-
-tb_cliente_dia AS (
-    SELECT  Idcliente,
-            strftime('%w', DtCriacao) AS DtDia,
-            count(*) AS qtdTransacao
-    FROM tb_transacoes 
-    WHERE diffDate <=28
-    GROUP BY IdCliente, DtDia
-),
-
-tb_cliente_dia_rn AS (
-
-    SELECT *,
-        ROW_NUMBER() OVER (PARTITION BY IdCliente ORDER BY qtdTransacao DESC) AS rnDia
+-- tb_cliente_produto AS (
+--     SELECT  IdCliente,
+--             DescNomeProduto,
+--             count(*) AS qtdeVida,
+--             count(CASE WHEN diffDate <= 56 THEN IdTransacao END) AS qtde56,
+--             count(CASE WHEN diffDate <= 28 THEN IdTransacao END) AS qtde28,
+--             count(CASE WHEN diffDate <= 14 THEN IdTransacao END) AS qtde14,
+--             count(CASE WHEN diffDate <= 7 THEN IdTransacao END) AS qtde7
 
 
-    FROM tb_cliente_dia
-),
+--     FROM tb_transacao_produto
 
-tb_cliente_periodo AS (
-    SELECT  Idcliente,
-            CASE 
-                WHEN DtHora BETWEEN 7 AND 12 THEN 'MANHÃ'
-                WHEN DtHora BETWEEN 13 AND 18 THEN 'TARDE'
-                WHEN DtHora BETWEEN 19 AND 23 THEN 'NOITE'
-                WHEN DtHora BETWEEN 24 AND 6 THEN 'MADRUGADA'
-                ELSE 'SEM INFORMAÇÃO'
-            END AS Periodo,
-            COUNT(*) AS qtdeTransacao
+--     GROUP BY IdCliente, DescNomeProduto
+-- ),
 
-    FROM tb_transacoes
-    WHERE diffDate <= 28
+-- tb_cliente_produto_rn AS ( 
+--     SELECT *,
+--         row_number() OVER (PARTITION BY IdCliente ORDER BY qtdeVida DESC) AS rnVida,
+--         row_number() OVER (PARTITION BY IdCliente ORDER BY qtde56 DESC) AS rn56,
+--         row_number() OVER (PARTITION BY IdCliente ORDER BY qtde28 DESC) AS rn28,
+--         row_number() OVER (PARTITION BY IdCliente ORDER BY qtde14 DESC) AS rn14,
+--         row_number() OVER (PARTITION BY IdCliente ORDER BY qtde7 DESC) AS rn7
+--     FROM tb_cliente_produto
+-- ),
 
-    GROUP BY 1,2
-),
+-- tb_cliente_dia AS (
+--     SELECT  Idcliente,
+--             strftime('%w', DtCriacao) AS DtDia,
+--             count(*) AS qtdTransacao
+--     FROM tb_transacoes 
+--     WHERE diffDate <=28
+--     GROUP BY IdCliente, DtDia
+-- ),
 
-tb_cliente_periodo_rn AS (
-    SELECT *,
-            ROW_NUMBER() OVER (PARTITION BY IdCliente ORDER BY qtdeTransacao DESC) AS rnPeriodo
+-- tb_cliente_dia_rn AS (
 
-    FROM tb_cliente_periodo
-),
+--     SELECT *,
+--         ROW_NUMBER() OVER (PARTITION BY IdCliente ORDER BY qtdTransacao DESC) AS rnDia
 
 
-tb_join AS  (
+--     FROM tb_cliente_dia
+-- ),
 
-    SELECT  t1.*,
-            t2.IdadeBase,
-            t3.DescNomeProduto AS produtoVida,
-            t4.DescNomeProduto AS produto56,
-            t5.DescNomeProduto AS produto28,
-            t6.DescNomeProduto AS produto14,
-            t7.DescNomeProduto AS produto7,
-            COALESCE(t8.DtDia, -1) AS DtDia,
-            COALESCE(t9.Periodo, 'SEM INFORMAÇÃO') AS periodoMaisTransacao28
+-- tb_cliente_periodo AS (
+--     SELECT  Idcliente,
+--             CASE 
+--                 WHEN DtHora BETWEEN 7 AND 12 THEN 'MANHÃ'
+--                 WHEN DtHora BETWEEN 13 AND 18 THEN 'TARDE'
+--                 WHEN DtHora BETWEEN 19 AND 23 THEN 'NOITE'
+--                 WHEN DtHora BETWEEN 24 AND 6 THEN 'MADRUGADA'
+--                 ELSE 'SEM INFORMAÇÃO'
+--             END AS Periodo,
+--             COUNT(*) AS qtdeTransacao
 
-    FROM tb_sumario_transacoes AS t1
+--     FROM tb_transacoes
+--     WHERE diffDate <= 28
 
-    LEFT JOIN tb_cliente AS t2
-    ON t1.IdCliente = t2.IdCliente
+--     GROUP BY 1,2
+-- ),
 
-    LEFT JOIN tb_cliente_produto_rn AS t3
-    ON t1.idCliente = t3.IdCliente
-    AND t3.rnVida = 1
+-- tb_cliente_periodo_rn AS (
+--     SELECT *,
+--             ROW_NUMBER() OVER (PARTITION BY IdCliente ORDER BY qtdeTransacao DESC) AS rnPeriodo
 
-    LEFT JOIN tb_cliente_produto_rn AS t4
-    ON t1.idCliente = t4.IdCliente
-    AND t4.rn56 = 1
+--     FROM tb_cliente_periodo
+-- ),
 
-    LEFT JOIN tb_cliente_produto_rn AS t5
-    ON t1.idCliente = t5.IdCliente
-    AND t5.rn28 = 1
+
+-- tb_join AS  (
+
+--     SELECT  t1.*,
+--             t2.IdadeBase,
+--             t3.DescNomeProduto AS produtoVida,
+--             t4.DescNomeProduto AS produto56,
+--             t5.DescNomeProduto AS produto28,
+--             t6.DescNomeProduto AS produto14,
+--             t7.DescNomeProduto AS produto7,
+--             COALESCE(t8.DtDia, -1) AS DtDia,
+--             COALESCE(t9.Periodo, 'SEM INFORMAÇÃO') AS periodoMaisTransacao28
+
+--     FROM tb_sumario_transacoes AS t1
+
+--     LEFT JOIN tb_cliente AS t2
+--     ON t1.IdCliente = t2.IdCliente
+
+--     LEFT JOIN tb_cliente_produto_rn AS t3
+--     ON t1.idCliente = t3.IdCliente
+--     AND t3.rnVida = 1
+
+--     LEFT JOIN tb_cliente_produto_rn AS t4
+--     ON t1.idCliente = t4.IdCliente
+--     AND t4.rn56 = 1
+
+--     LEFT JOIN tb_cliente_produto_rn AS t5
+--     ON t1.idCliente = t5.IdCliente
+--     AND t5.rn28 = 1
     
-    LEFT JOIN tb_cliente_produto_rn AS t6
-    ON t1.idCliente = t6.IdCliente
-    AND t6.rn14 = 1
+--     LEFT JOIN tb_cliente_produto_rn AS t6
+--     ON t1.idCliente = t6.IdCliente
+--     AND t6.rn14 = 1
 
-    LEFT JOIN tb_cliente_produto_rn AS t7
-    ON t1.idCliente = t7.IdCliente
-    AND t7.rn7 = 1
+--     LEFT JOIN tb_cliente_produto_rn AS t7
+--     ON t1.idCliente = t7.IdCliente
+--     AND t7.rn7 = 1
 
-    LEFT JOIN tb_cliente_dia_rn AS t8
-    ON t1.idCliente = t8.idCliente
-    AND t8.rnDia = 1
+--     LEFT JOIN tb_cliente_dia_rn AS t8
+--     ON t1.idCliente = t8.idCliente
+--     AND t8.rnDia = 1
 
-    LEFT JOIN tb_cliente_periodo_rn AS t9
-    ON t1.idCliente = t9.idCliente
-    AND t9.rnPeriodo = 1
-)
+--     LEFT JOIN tb_cliente_periodo_rn AS t9
+--     ON t1.idCliente = t9.idCliente
+--     AND t9.rnPeriodo = 1
+-- )
 
-SELECT  *, 
-        -- '2025/01/22' drRef, para saber a data especifica da consulta
-        1. * qtdeTransacoesD28 / qtdeTransacoesVida as engajamento28vida
-FROM tb_join
+-- INSERT INTO feature_store_cliente
+
+-- SELECT  
+--         '2025-06-01' AS dtRef,
+--         *, 
+--         -- '2025/01/22' drRef, para saber a data especifica da consulta
+--         1. * qtdeTransacoesD28 / qtdeTransacoesVida as engajamento28vida
+-- FROM tb_join
+
+
+ -- SAFRA de cliente
+SELECT * 
+FROM feature_store_cliente
+ORDER BY IdCliente, dtRef
